@@ -8,19 +8,19 @@ export const puzzleData: PuzzleData = {
       {
         isBlocked: false,
         answer: "C",
-        revealed: true,
+        revealed: false,
         clueNumbers: { across: 1 },
       },
       {
         isBlocked: false,
         answer: "A",
-        revealed: true,
+        revealed: false,
         clueNumbers: { across: 2 },
       },
       {
         isBlocked: false,
         answer: "T",
-        revealed: true,
+        revealed: false,
         clueNumbers: { across: 3 },
       },
     ],
