@@ -111,12 +111,12 @@ export default function CrosswordGrid({ puzzle }: CrosswordGridProps) {
       }
 
       if (isPartOfCurrentWord) {
-        classes += " bg-blue-200";
+        classes += " bg-[#a7d8ff]";
       }
 
       // Highlight the current cell
       if (currentCell && currentCell[0] === row && currentCell[1] === col) {
-        classes += " bg-yellow-300";
+        classes += " bg-[#ffda00]";
       }
     }
 

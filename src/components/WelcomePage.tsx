@@ -10,6 +10,8 @@ export default function WelcomePage() {
     navigate("/play");
   };
 
+  const appStoreLink = "https://www.apple.com/la/apple-arcade/";
+
   return (
     // El div principal ahora ocupa toda la altura de la ventana y fuerza a no tener scroll
     <div className="h-screen flex items-center justify-center bg-gray-100 overflow-hidden">
@@ -37,46 +39,18 @@ export default function WelcomePage() {
         >
           Play
         </Button>
+        {/* Enlace "Get the app" */}
+        <div className="flex flex-col items-center mt-4">
+          <a
+            href={appStoreLink}
+            target="_blank" // Abre el enlace en una nueva pestaña
+            rel="noopener noreferrer" // Por seguridad al abrir nuevas pestañas
+            className="text-white text-sm underline cursor-pointer font-semibold"
+          >
+            Get the app
+          </a>
+        </div>
       </div>
     </div>
   );
 }
-
-// import { useNavigate } from "react-router-dom";
-// import { Button } from "../components/Button";
-// import gifImage from "../assets/JUGGLER_2.gif";
-// export default function WelcomePage() {
-//   const navigate = useNavigate();
-
-//   const handleStartGame = () => {
-//     navigate("/play");
-//   };
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-//       <div className="w-[320px] h-[520px] bg-[#5a82b4] rounded-2xl shadow-lg flex flex-col items-center justify-between py-8 px-4">
-//         {/* Textos superiores */}
-//         <div className="text-center text-white font-serif">
-//           <p className="text-sm">The New York Times</p>
-//           <h1 className="text-2xl font-bold mt-1">Crossword</h1>
-//           <p className="text-lg font-semibold mt-1">Try the Mini puzzle.</p>
-//         </div>
-
-//         {/* Imagen centrada */}
-//         <img
-//           src={gifImage}
-//           alt="Puzzle"
-//           className="w-[160px] h-[160px] object-contain"
-//         />
-
-//         {/* Botón inferior */}
-//         <Button
-//           onClick={handleStartGame}
-//           className="bg-white text-blue-600 font-semibold text-lg px-6 py-2 rounded-full shadow hover:bg-gray-100 transition"
-//         >
-//           Play
-//         </Button>
-//       </div>
-//     </div>
-//   );
-// }
