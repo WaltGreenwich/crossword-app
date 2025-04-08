@@ -16,45 +16,101 @@ export default function CrosswordGrid({ puzzle }: CrosswordGridProps) {
   } = useCrossword();
 
   const handleCellClick = (row: number, col: number) => {
-    if (puzzle.grid[row][col].isBlocked) return;
+    if (puzzle.grid[row][col]?.isBlocked) return;
 
-    // If clicking the same cell, toggle direction
+    // Si se hace clic en la misma celda, cambia la dirección
     if (currentCell && currentCell[0] === row && currentCell[1] === col) {
       setCurrentDirection(currentDirection === "across" ? "down" : "across");
     }
 
     setCurrentCell([row, col]);
 
-    // Set the current clue based on the cell and direction
-    const cell = puzzle.grid[row][col];
-    if (cell.clueNumbers) {
-      if (currentDirection === "across" && cell.clueNumbers.across) {
-        setCurrentClue(cell.clueNumbers.across);
-      } else if (currentDirection === "down" && cell.clueNumbers.down) {
-        setCurrentClue(cell.clueNumbers.down);
-      } else if (
-        currentDirection === "across" &&
-        !cell.clueNumbers.across &&
-        cell.clueNumbers.down
-      ) {
-        setCurrentDirection("down");
-        setCurrentClue(cell.clueNumbers.down);
-      } else if (
-        currentDirection === "down" &&
-        !cell.clueNumbers.down &&
-        cell.clueNumbers.across
-      ) {
-        setCurrentDirection("across");
-        setCurrentClue(cell.clueNumbers.across);
+    const getClueNumberForCell = (
+      r: number,
+      c: number,
+      direction: "across" | "down"
+    ): number | undefined => {
+      if (direction === "across") {
+        // Buscar hacia la izquierda hasta encontrar un número o un bloque
+        let currentCol = c;
+        while (
+          currentCol >= 0 &&
+          !puzzle.grid[r][currentCol]?.isBlocked &&
+          !puzzle.grid[r][currentCol]?.clueNumbers?.across
+        ) {
+          currentCol--;
+        }
+        return puzzle.grid[r][currentCol]?.clueNumbers?.across;
+      } else if (direction === "down") {
+        // Buscar hacia arriba hasta encontrar un número o un bloque
+        let currentRow = r;
+        while (
+          currentRow >= 0 &&
+          !puzzle.grid[currentRow][c]?.isBlocked &&
+          !puzzle.grid[currentRow][c]?.clueNumbers?.down
+        ) {
+          currentRow--;
+        }
+        return puzzle.grid[currentRow][c]?.clueNumbers?.down;
+      }
+      return undefined;
+    };
+
+    const clueNumber = getClueNumberForCell(row, col, currentDirection);
+
+    if (clueNumber) {
+      setCurrentClue(clueNumber);
+    } else {
+      // Si no hay número en la dirección actual, intenta la otra dirección
+      const otherDirection = currentDirection === "across" ? "down" : "across";
+      const otherClueNumber = getClueNumberForCell(row, col, otherDirection);
+      if (otherClueNumber) {
+        setCurrentClue(otherClueNumber);
+        setCurrentDirection(otherDirection);
       }
     }
   };
+
+  // const handleCellClick = (row: number, col: number) => {
+  //   if (puzzle.grid[row][col].isBlocked) return;
+
+  //   // If clicking the same cell, toggle direction
+  //   if (currentCell && currentCell[0] === row && currentCell[1] === col) {
+  //     setCurrentDirection(currentDirection === "across" ? "down" : "across");
+  //   }
+
+  //   setCurrentCell([row, col]);
+
+  //   // Set the current clue based on the cell and direction
+  //   const cell = puzzle.grid[row][col];
+  //   if (cell.clueNumbers) {
+  //     if (currentDirection === "across" && cell.clueNumbers.across) {
+  //       setCurrentClue(cell.clueNumbers.across);
+  //     } else if (currentDirection === "down" && cell.clueNumbers.down) {
+  //       setCurrentClue(cell.clueNumbers.down);
+  //     } else if (
+  //       currentDirection === "across" &&
+  //       !cell.clueNumbers.across &&
+  //       cell.clueNumbers.down
+  //     ) {
+  //       setCurrentDirection("down");
+  //       setCurrentClue(cell.clueNumbers.down);
+  //     } else if (
+  //       currentDirection === "down" &&
+  //       !cell.clueNumbers.down &&
+  //       cell.clueNumbers.across
+  //     ) {
+  //       setCurrentDirection("across");
+  //       setCurrentClue(cell.clueNumbers.across);
+  //     }
+  //   }
+  // };
 
   const getCellClasses = (row: number, col: number) => {
     const cell = puzzle.grid[row][col];
 
     let classes =
-      "w-full h-full flex items-center justify-center relative border border-gray-300";
+      "w-full h-full flex items-center justify-center relative border border-gray-400 overflow-hidden";
 
     if (cell.isBlocked) {
       classes += " bg-black";
@@ -129,7 +185,7 @@ export default function CrosswordGrid({ puzzle }: CrosswordGridProps) {
         row.map((cell, colIndex) => (
           <div
             key={`${rowIndex}-${colIndex}`}
-            className={getCellClasses(rowIndex, colIndex)}
+            className={`${getCellClasses(rowIndex, colIndex)} aspect-square`}
             onClick={() => handleCellClick(rowIndex, colIndex)}
           >
             {cell.isBlocked ? null : (

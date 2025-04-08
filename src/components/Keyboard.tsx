@@ -1,4 +1,5 @@
 import { useCrossword } from "../context/CrosswordContext";
+import { puzzleData } from "../data/puzzleData";
 
 export default function Keyboard() {
   const {
@@ -21,28 +22,31 @@ export default function Keyboard() {
     let [row, col] = currentCell;
 
     if (key === "⌫") {
-      // Si la celda actual ya está vacía => retrocede
       if (userAnswers[row][col] === "") {
-        //Diferenciamos si la dirección es across o down
         if (currentDirection === "across") {
-          const prevCol = col - 1;
+          let prevCol = col - 1;
+          // Recorremos hacia atrás saltando las celdas bloqueadas
+          while (prevCol >= 0 && puzzleData.grid[row][prevCol].isBlocked) {
+            prevCol--;
+          }
           if (prevCol < 0) return;
-          // Actualiza la celda anterior a vacío y mueve el foco
           updateUserAnswer(row, prevCol, "");
           setCurrentCell([row, prevCol]);
         } else if (currentDirection === "down") {
-          const prevRow = row - 1;
+          let prevRow = row - 1;
+          while (prevRow >= 0 && puzzleData.grid[prevRow][col].isBlocked) {
+            prevRow--;
+          }
           if (prevRow < 0) return;
-          // Actualiza la celda anterior a vacío y mueve el foco
           updateUserAnswer(prevRow, col, "");
           setCurrentCell([prevRow, col]);
         }
       } else {
-        // Si tiene contenido lo borra
         updateUserAnswer(row, col, "");
       }
     } else {
       updateUserAnswer(row, col, key);
+      // Opcional: avanzar al siguiente cuadro escribible según la lógica deseada.
     }
   };
 
@@ -68,8 +72,13 @@ export default function Keyboard() {
 // import { useCrossword } from "../context/CrosswordContext";
 
 // export default function Keyboard() {
-//   const { currentCell, updateUserAnswer, userAnswers, setCurrentCell } =
-//     useCrossword();
+//   const {
+//     currentCell,
+//     updateUserAnswer,
+//     userAnswers,
+//     setCurrentCell,
+//     currentDirection,
+//   } = useCrossword();
 
 //   const keys = [
 //     ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -83,26 +92,28 @@ export default function Keyboard() {
 //     let [row, col] = currentCell;
 
 //     if (key === "⌫") {
-//       // Si la celda actual ya está vacía, intenta retroceder
+//       // Si la celda actual ya está vacía => retrocede
 //       if (userAnswers[row][col] === "") {
-//         // Ejemplo: retroceder en dirección "across" (celda anterior en la misma fila)
-//         let prevCol = col - 1;
-//         let prevRow = row;
-//         // Si es la primera columna, puedes optar por no hacer nada o buscar en la fila anterior
-//         if (prevCol < 0) {
-//           // En este ejemplo, si es la primera columna, no se retrocede
-//           return;
+//         //Diferenciamos si la dirección es across o down
+//         if (currentDirection === "across") {
+//           const prevCol = col - 1;
+//           if (prevCol < 0) return;
+//           // Actualiza la celda anterior a vacío y mueve el foco
+//           updateUserAnswer(row, prevCol, "");
+//           setCurrentCell([row, prevCol]);
+//         } else if (currentDirection === "down") {
+//           const prevRow = row - 1;
+//           if (prevRow < 0) return;
+//           // Actualiza la celda anterior a vacío y mueve el foco
+//           updateUserAnswer(prevRow, col, "");
+//           setCurrentCell([prevRow, col]);
 //         }
-//         // Actualiza la celda anterior a vacío y mueve el foco
-//         updateUserAnswer(prevRow, prevCol, "");
-//         setCurrentCell([prevRow, prevCol]);
 //       } else {
-//         // Si tiene contenido, simplemente lo borra
+//         // Si tiene contenido lo borra
 //         updateUserAnswer(row, col, "");
 //       }
 //     } else {
 //       updateUserAnswer(row, col, key);
-//       // Aquí podrías también avanzar el foco a la siguiente celda, si así lo deseas.
 //     }
 //   };
 

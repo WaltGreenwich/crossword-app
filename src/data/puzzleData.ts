@@ -56,6 +56,8 @@ export const puzzleData: PuzzleData = {
   clues: {
     across: [
       { number: 1, clue: "Pet that purrs", answer: "CAT" },
+      { number: 2, clue: "Pet that purrs", answer: "CAT" },
+      { number: 3, clue: "Pet that purrs", answer: "CAT" },
       { number: 4, clue: "One-person musical performance", answer: "SOLO" },
       { number: 5, clue: " ⏸️ on a YouTube video", answer: "PAUSE" },
       { number: 6, clue: "Hairdo with a pick", answer: "AFRO" },
@@ -67,6 +69,8 @@ export const puzzleData: PuzzleData = {
       { number: 3, clue: "One of five on a foot", answer: "TOE" },
       { number: 4, clue: "Opposite of 'out' in baseball ", answer: "SAFE" },
       { number: 5, clue: "Furry foot", answer: "PAW" },
+      { number: 6, clue: "Furry foot", answer: "PAW" },
+      { number: 7, clue: "Furry foot", answer: "PAW" },
     ],
   },
 };
