@@ -31,29 +31,32 @@ export default function CrosswordGrid({ puzzle }: CrosswordGridProps) {
       direction: "across" | "down"
     ): number | undefined => {
       if (direction === "across") {
-        // Buscar hacia la izquierda hasta encontrar un número o un bloque
         let currentCol = c;
-        while (
-          currentCol >= 0 &&
-          !puzzle.grid[r][currentCol]?.isBlocked &&
-          !puzzle.grid[r][currentCol]?.clueNumbers?.across
-        ) {
+        let lastValid: number | undefined = undefined;
+        while (currentCol >= 0 && !puzzle.grid[r][currentCol]?.isBlocked) {
+          if (puzzle.grid[r][currentCol]?.clueNumbers?.across !== undefined) {
+            lastValid = puzzle.grid[r][currentCol]!.clueNumbers!.across;
+          }
           currentCol--;
         }
-        return puzzle.grid[r][currentCol]?.clueNumbers?.across;
-      } else if (direction === "down") {
-        // Buscar hacia arriba hasta encontrar un número o un bloque
+        console.log(
+          `getClueNumberForCell (across) for cell [${r}, ${c}]: lastValid = ${lastValid}`
+        );
+        return lastValid;
+      } else {
         let currentRow = r;
-        while (
-          currentRow >= 0 &&
-          !puzzle.grid[currentRow][c]?.isBlocked &&
-          !puzzle.grid[currentRow][c]?.clueNumbers?.down
-        ) {
+        let lastValid: number | undefined = undefined;
+        while (currentRow >= 0 && !puzzle.grid[currentRow][c]?.isBlocked) {
+          if (puzzle.grid[currentRow][c]?.clueNumbers?.down !== undefined) {
+            lastValid = puzzle.grid[currentRow][c]!.clueNumbers!.down;
+          }
           currentRow--;
         }
-        return puzzle.grid[currentRow][c]?.clueNumbers?.down;
+        console.log(
+          `getClueNumberForCell (down) for cell [${r}, ${c}]: lastValid = ${lastValid}`
+        );
+        return lastValid;
       }
-      return undefined;
     };
 
     const clueNumber = getClueNumberForCell(row, col, currentDirection);
@@ -70,41 +73,6 @@ export default function CrosswordGrid({ puzzle }: CrosswordGridProps) {
       }
     }
   };
-
-  // const handleCellClick = (row: number, col: number) => {
-  //   if (puzzle.grid[row][col].isBlocked) return;
-
-  //   // If clicking the same cell, toggle direction
-  //   if (currentCell && currentCell[0] === row && currentCell[1] === col) {
-  //     setCurrentDirection(currentDirection === "across" ? "down" : "across");
-  //   }
-
-  //   setCurrentCell([row, col]);
-
-  //   // Set the current clue based on the cell and direction
-  //   const cell = puzzle.grid[row][col];
-  //   if (cell.clueNumbers) {
-  //     if (currentDirection === "across" && cell.clueNumbers.across) {
-  //       setCurrentClue(cell.clueNumbers.across);
-  //     } else if (currentDirection === "down" && cell.clueNumbers.down) {
-  //       setCurrentClue(cell.clueNumbers.down);
-  //     } else if (
-  //       currentDirection === "across" &&
-  //       !cell.clueNumbers.across &&
-  //       cell.clueNumbers.down
-  //     ) {
-  //       setCurrentDirection("down");
-  //       setCurrentClue(cell.clueNumbers.down);
-  //     } else if (
-  //       currentDirection === "down" &&
-  //       !cell.clueNumbers.down &&
-  //       cell.clueNumbers.across
-  //     ) {
-  //       setCurrentDirection("across");
-  //       setCurrentClue(cell.clueNumbers.across);
-  //     }
-  //   }
-  // };
 
   const getCellClasses = (row: number, col: number) => {
     const cell = puzzle.grid[row][col];

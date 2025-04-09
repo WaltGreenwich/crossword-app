@@ -63,20 +63,18 @@ export function CrosswordProvider({ children }: { children: ReactNode }) {
     const [row, col] = currentCell;
 
     if (currentDirection === "across") {
-      // Try to move right
       let nextCol = col + 1;
       while (nextCol < puzzle.grid[0].length) {
-        if (!puzzle.grid[row][nextCol].isBlocked) {
+        if (!puzzle.grid[row][nextCol]?.isBlocked) {
           setCurrentCell([row, nextCol]);
           return;
         }
         nextCol++;
       }
     } else {
-      // Try to move down
       let nextRow = row + 1;
       while (nextRow < puzzle.grid.length) {
-        if (!puzzle.grid[nextRow][col].isBlocked) {
+        if (!puzzle.grid[nextRow][col]?.isBlocked) {
           setCurrentCell([nextRow, col]);
           return;
         }
@@ -91,20 +89,18 @@ export function CrosswordProvider({ children }: { children: ReactNode }) {
     const [row, col] = currentCell;
 
     if (currentDirection === "across") {
-      // Try to move left
       let prevCol = col - 1;
       while (prevCol >= 0) {
-        if (!puzzle.grid[row][prevCol].isBlocked) {
+        if (!puzzle.grid[row][prevCol]?.isBlocked) {
           setCurrentCell([row, prevCol]);
           return;
         }
         prevCol--;
       }
     } else {
-      // Try to move up
       let prevRow = row - 1;
       while (prevRow >= 0) {
-        if (!puzzle.grid[prevRow][col].isBlocked) {
+        if (!puzzle.grid[prevRow][col]?.isBlocked) {
           setCurrentCell([prevRow, col]);
           return;
         }
@@ -124,10 +120,9 @@ export function CrosswordProvider({ children }: { children: ReactNode }) {
       const nextClue = clues[currentIndex + 1];
       setCurrentClue(nextClue.number);
 
-      // Find the first cell of the next clue
       for (let r = 0; r < puzzle.grid.length; r++) {
         for (let c = 0; c < puzzle.grid[0].length; c++) {
-          const clueNumbers = puzzle.grid[r][c].clueNumbers;
+          const clueNumbers = puzzle.grid[r][c]?.clueNumbers;
           if (clueNumbers) {
             if (
               currentDirection === "across" &&
@@ -160,10 +155,9 @@ export function CrosswordProvider({ children }: { children: ReactNode }) {
       const prevClue = clues[currentIndex - 1];
       setCurrentClue(prevClue.number);
 
-      // Find the first cell of the previous clue
       for (let r = 0; r < puzzle.grid.length; r++) {
         for (let c = 0; c < puzzle.grid[0].length; c++) {
-          const clueNumbers = puzzle.grid[r][c].clueNumbers;
+          const clueNumbers = puzzle.grid[r][c]?.clueNumbers;
           if (clueNumbers) {
             if (
               currentDirection === "across" &&

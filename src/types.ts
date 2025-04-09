@@ -6,6 +6,8 @@ export interface CellData {
     across?: number;
     down?: number;
   };
+  acrossClueText?: string;
+  downClueText?: string;
 }
 
 export interface Clue {
